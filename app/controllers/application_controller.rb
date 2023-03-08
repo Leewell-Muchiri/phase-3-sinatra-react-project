@@ -2,19 +2,30 @@ class ApplicationController < Sinatra::Base
   set :default_content_type, 'application/json'
   
   # Add your routes here
-  get "/" do
-    { message: "If laughter is the best medicine, welcome to the GIFTED HANDS!" }.to_json
+  before do
+    response.headers['Access-Control-Allow-Origin']="*"
   end
 
-  post '/memes' do
+  put '/memes' do
     #user creates a meme
-    meme = Meme.create(
-      title: params[:title],
-      your_meme: params[:your_meme],
-      meme_id: params[:meme_id]
-    )
+    meme = Meme.create(params)
+    #   title: params[:title],
+    #   your_meme: params[:your_meme],
+    #   meme_id: params[:meme_id]
+    # )
     meme.to_json
+    
   end
+
+  put '/users' do
+    #creating a user
+    user = User.create(params)
+    #   username: params[:username],
+    #   password: params[:password]
+    # )
+    user.to_json
+  end
+
 
   get '/memes' do
     #user views all the memes they made
@@ -22,24 +33,39 @@ class ApplicationController < Sinatra::Base
     memes.to_json
   end
 
-  get '/memes/by_user' do
-    #see the memes made by a user
+
+  get '/memes/:id' do
+    meme = Meme.find(params[:id])
+    meme.to_json
   end
 
-  patch '/memes/:id' do
+  put '/memes/:id' do
     #update details of the meme
     meme = Meme.find(params[:id])
-    meme.update_attributes(
-      title: params[:title]
+    meme.update(
+      title: params[:title],
+      your_meme: params[:your_meme]
     )
     meme.to_json
   end
 
-  delete '/meme/:id' do
+  delete '/memes/:id' do
     #remove meme
-    memes = Meme.find(params[:id])
-    memes.destroy
-    { message: "Meme removed!" }.to_json
+    meme = Meme.find(params[:id])
+    meme.destroy
+    meme.to_json
+    
+  end
+
+  post '/register' do
+    user = User.new(username: params[:username], password: params[:password])
+
+    if user.save
+      session[:user_id] = user.id
+      { message: 'Welcome to firePuttr. You registered successfully'}.to_json
+    else
+      { message: 'Error occured while registering'}.to_json
+    end
   end
 
 end

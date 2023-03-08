@@ -13,8 +13,8 @@ meme3 = Meme.create(user_id: 3, title: "cars", your_meme: "Buy a MOBIUS. It last
 # meme4 = Meme.create(title: "", your_meme: "")
 # meme5 = Meme.create(title: "", your_meme: "")
 # meme6 = Meme.create(title: "", your_meme: "")
-meme7 = Meme.create(title: "", your_meme: "")
-meme8 = Meme.create(title: "", your_meme: "")
+# meme7 = Meme.create(title: "", your_meme: "")
+# meme8 = Meme.create(title: "", your_meme: "")
 
 
 puts "✅ Done seeding!"
